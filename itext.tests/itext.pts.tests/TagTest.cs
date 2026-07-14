@@ -159,5 +159,70 @@ namespace iText.Pts.Tests {
 
             Assert.IsTrue(new System.IO.FileInfo(outFileName).Exists);
         }
+
+        [Test]
+        public virtual void CreateTaggedPdfFromXmlIndexTest() {
+            String outFileName = DESTINATION_FOLDER + "taggedXmlIndex.pdf";
+
+            PdfDocument pdfDocument = new PdfDocument(new PdfWriter(outFileName));
+            pdfDocument.SetTagged();
+
+            Document document = new Document(pdfDocument);
+
+            // H1 heading
+            var h1 = new Paragraph("Index");
+            h1.GetAccessibilityProperties().SetRole(StandardRoles.H1);
+            document.Add(h1);
+
+            // Index element (Div with role Index)
+            var indexDiv = new Div();
+            indexDiv.GetAccessibilityProperties().SetRole(StandardRoles.INDEX);
+
+            // Outer list L
+            var outerList = new iText.Layout.Element.List();
+            outerList.SetListSymbol("-");
+
+            // LI: Appetizer
+            var appetizerItem = new ListItem();
+            appetizerItem.SetListSymbol("Appetizer");
+            // Nested list inside LBody
+            var appetizerList = new iText.Layout.Element.List();
+            appetizerList.SetListSymbol("-");
+
+            var bruschettaItem = new ListItem();
+            bruschettaItem.SetListSymbol("Bruschetta");
+            bruschettaItem.Add(new Paragraph("20, 22-24, see also Food").SetNeutralRole());
+            appetizerList.Add(bruschettaItem);
+
+            var caesarSaladItem = new ListItem();
+            caesarSaladItem.SetListSymbol("Caesar Salad");
+            caesarSaladItem.Add(new Paragraph("28, 29, see also Salad").SetNeutralRole());
+            appetizerList.Add(caesarSaladItem);
+
+            appetizerItem.Add(appetizerList);
+            outerList.Add(appetizerItem);
+
+            // LI: Main Dishes
+            var mainDishesItem = new ListItem();
+            mainDishesItem.SetListSymbol("Main Dishes");
+            // Nested list inside LBody
+            var mainDishesList = new iText.Layout.Element.List();
+            mainDishesList.SetListSymbol("-");
+
+            var macaroniItem = new ListItem();
+            macaroniItem.SetListSymbol("Macaroni and cheese");
+            macaroniItem.Add(new Paragraph("30, see also Food").SetNeutralRole());
+            mainDishesList.Add(macaroniItem);
+
+            mainDishesItem.Add(mainDishesList);
+            outerList.Add(mainDishesItem);
+
+            indexDiv.Add(outerList);
+            document.Add(indexDiv);
+
+            document.Close();
+
+            Assert.IsTrue(new System.IO.FileInfo(outFileName).Exists);
+        }
     }
 }
