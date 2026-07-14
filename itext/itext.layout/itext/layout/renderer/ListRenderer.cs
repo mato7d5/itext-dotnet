@@ -407,11 +407,21 @@ namespace iText.Layout.Renderer {
                     }
                 }
                 float? symbolIndent = this.GetPropertyAsFloat(Property.LIST_SYMBOL_INDENT);
+                float? nestedListIndent = this.GetPropertyAsFloat(Property.LIST_INDENT);
                 listItemNum = 0;
                 foreach (IRenderer childRenderer in childRenderers) {
                     IRenderer symbolRenderer = symbolRenderers[listItemNum++];
                     if (!(childRenderer is ListItemRenderer)) {
                         // Non-ListItem children (e.g. Paragraph, nested List) do not get list symbols
+                        // Apply indent to nested lists so they are visually offset from the parent list
+                        if (childRenderer is iText.Layout.Renderer.ListRenderer && nestedListIndent != null) {
+                            bool isRtlNested = BaseDirection.RIGHT_TO_LEFT == childRenderer.GetProperty<BaseDirection?>(Property.BASE_DIRECTION);
+                            int nestedMarginToSet = isRtlNested ? Property.MARGIN_RIGHT : Property.MARGIN_LEFT;
+                            UnitValue existingMargin = childRenderer.GetProperty<UnitValue>(nestedMarginToSet, UnitValue.CreatePointValue(0f));
+                            float nestedCalculatedMargin = existingMargin.IsPointValue() ? existingMargin.GetValue() : 0f;
+                            nestedCalculatedMargin += (float)nestedListIndent;
+                            childRenderer.SetProperty(nestedMarginToSet, UnitValue.CreatePointValue(nestedCalculatedMargin));
+                        }
                         continue;
                     }
                     // Symbol indent's value should be summed with the margin's value

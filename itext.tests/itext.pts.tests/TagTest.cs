@@ -53,6 +53,7 @@ namespace iText.Pts.Tests {
             var list = new iText.Layout.Element.List();
             list.SetListSymbol("-");
             list.SetNeutralRole();
+            list.SetListIndent(20);
 
             // Category: Drama books
             var dramaItem = new ListItem();
@@ -114,6 +115,7 @@ namespace iText.Pts.Tests {
             // Outer list L with Caption as a direct child
             var outerList = new iText.Layout.Element.List();
             outerList.SetListSymbol("-");
+            outerList.SetListIndent(20);
 
             // Caption as direct child of L
             var caption = new Paragraph(new Text("My Library").SetNeutralRole());
@@ -181,6 +183,7 @@ namespace iText.Pts.Tests {
             // Outer list L
             var outerList = new iText.Layout.Element.List();
             outerList.SetListSymbol("-");
+            outerList.SetListIndent(20);
 
             // LI: Appetizer
             var appetizerItem = new ListItem();
@@ -188,6 +191,7 @@ namespace iText.Pts.Tests {
             // Nested list inside LBody
             var appetizerList = new iText.Layout.Element.List();
             appetizerList.SetListSymbol("-");
+            appetizerList.SetMarginLeft(20);
 
             var bruschettaItem = new ListItem();
             bruschettaItem.SetListSymbol("Bruschetta");
@@ -208,6 +212,7 @@ namespace iText.Pts.Tests {
             // Nested list inside LBody
             var mainDishesList = new iText.Layout.Element.List();
             mainDishesList.SetListSymbol("-");
+            mainDishesList.SetMarginLeft(20);
 
             var macaroniItem = new ListItem();
             macaroniItem.SetListSymbol("Macaroni and cheese");

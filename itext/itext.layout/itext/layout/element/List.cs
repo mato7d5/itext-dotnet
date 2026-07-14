@@ -259,6 +259,24 @@ namespace iText.Layout.Element {
         }
 
         /// <summary>
+        /// Gets the indent (left margin) applied to nested lists that are direct children of this list.
+        /// </summary>
+        /// <returns>the nested list indent as a <c>float</c>, or <c>null</c> if not set.</returns>
+        public virtual float? GetListIndent() {
+            return this.GetProperty<float?>(Property.LIST_INDENT);
+        }
+
+        /// <summary>
+        /// Sets the indent (left margin) applied to nested lists that are direct children of this list.
+        /// </summary>
+        /// <param name="listIndent">the indent offset for nested lists.</param>
+        /// <returns>this list.</returns>
+        public virtual iText.Layout.Element.List SetListIndent(float listIndent) {
+            SetProperty(Property.LIST_INDENT, listIndent);
+            return this;
+        }
+
+        /// <summary>
         /// Gets the piece of text that is added after the
         /// <see cref="ListItem"/>
         /// symbol.
