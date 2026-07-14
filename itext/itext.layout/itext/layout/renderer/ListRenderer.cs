@@ -319,6 +319,11 @@ namespace iText.Layout.Renderer {
             // Notice that placed item is a son of the first ListItemRenderer (otherwise there would be now
             // FORCED_PLACEMENT applied)
             IRenderer firstListItemRenderer = splitRenderer.GetChildRenderers()[0];
+            if (!(firstListItemRenderer is ListItemRenderer)) {
+                // If the first child is not a ListItemRenderer, fall back to default behaviour
+                return new LayoutResult(null == overflowRenderer ? LayoutResult.FULL : LayoutResult.PARTIAL, occupiedArea, 
+                    splitRenderer, overflowRenderer, this);
+            }
             iText.Layout.Renderer.ListRenderer newOverflowRenderer = (iText.Layout.Renderer.ListRenderer)CreateOverflowRenderer
                 (LayoutResult.PARTIAL);
             newOverflowRenderer.DeleteOwnProperty(Property.FORCED_PLACEMENT);
@@ -357,6 +362,11 @@ namespace iText.Layout.Renderer {
                 IList<IRenderer> symbolRenderers = new List<IRenderer>();
                 int listItemNum = (int)this.GetProperty<int?>(Property.LIST_START, 1);
                 foreach (IRenderer renderer in childRenderers) {
+                    if (!(renderer is ListItemRenderer)) {
+                        // Non-ListItem children (e.g. Paragraph, nested List) do not get list symbols
+                        symbolRenderers.Add(null);
+                        continue;
+                    }
                     renderer.SetParent(this);
                     listItemNum = (renderer.GetProperty<int?>(Property.LIST_SYMBOL_ORDINAL_VALUE) != null) ? (int)renderer.GetProperty
                         <int?>(Property.LIST_SYMBOL_ORDINAL_VALUE) : listItemNum;
@@ -399,6 +409,11 @@ namespace iText.Layout.Renderer {
                 float? symbolIndent = this.GetPropertyAsFloat(Property.LIST_SYMBOL_INDENT);
                 listItemNum = 0;
                 foreach (IRenderer childRenderer in childRenderers) {
+                    IRenderer symbolRenderer = symbolRenderers[listItemNum++];
+                    if (!(childRenderer is ListItemRenderer)) {
+                        // Non-ListItem children (e.g. Paragraph, nested List) do not get list symbols
+                        continue;
+                    }
                     // Symbol indent's value should be summed with the margin's value
                     bool isRtl = BaseDirection.RIGHT_TO_LEFT == childRenderer.GetProperty<BaseDirection?>(Property.BASE_DIRECTION
                         );
@@ -417,7 +432,6 @@ namespace iText.Layout.Renderer {
                         calculatedMargin += maxSymbolWidth + (float)(symbolIndent != null ? symbolIndent : 0f);
                     }
                     childRenderer.SetProperty(marginToSet, UnitValue.CreatePointValue(calculatedMargin));
-                    IRenderer symbolRenderer = symbolRenderers[listItemNum++];
                     ((ListItemRenderer)childRenderer).AddSymbolRenderer(symbolRenderer, maxSymbolWidth);
                     if (symbolRenderer != null) {
                         LayoutTaggingHelper taggingHelper = this.GetProperty<LayoutTaggingHelper>(Property.TAGGING_HELPER);

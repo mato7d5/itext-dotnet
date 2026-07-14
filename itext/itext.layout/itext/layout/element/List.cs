@@ -99,6 +99,30 @@ namespace iText.Layout.Element {
 
         /// <summary>
         /// Adds a new
+        /// <see cref="iText.Layout.Element.List"/>
+        /// (nested list) to the bottom of the List.
+        /// </summary>
+        /// <param name="list">a nested list</param>
+        /// <returns>this list.</returns>
+        public virtual iText.Layout.Element.List Add(iText.Layout.Element.List list) {
+            childElements.Add(list);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a new
+        /// <see cref="IBlockElement"/>
+        /// to the bottom of the List.
+        /// </summary>
+        /// <param name="element">a block element (e.g. Paragraph)</param>
+        /// <returns>this list.</returns>
+        public virtual iText.Layout.Element.List Add(IBlockElement element) {
+            childElements.Add(element);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a new
         /// <see cref="ListItem"/>
         /// to the bottom of the List.
         /// </summary>
