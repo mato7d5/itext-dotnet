@@ -290,6 +290,11 @@ namespace iText.Layout.Properties {
 
         public const int ORDER = 159;
 
+        /// <summary>
+        /// The indent (left margin) applied to nested lists that are direct children of a parent list.
+        /// </summary>
+        public const int LIST_INDENT = 160;
+
         public const int ORPHANS_CONTROL = 121;
 
         public const int OUTLINE = 106;
